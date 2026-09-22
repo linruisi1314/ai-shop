@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>智能云 AI 商城 · 在线销售系统</title>
+<style>
+:root{
+  --bg:#0f1226;--card:#171a35;--line:#2a2f55;--text:#e8eaff;--muted:#9aa0c7;
+  --brand:#6c5ce7;--brand2:#00d2ff;--accent:#ffd166;--ok:#2ecc71;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif;
+  background:radial-gradient(1200px 600px at 80% -10%,#2a1d6b 0%,var(--bg) 55%);color:var(--text);line-height:1.6;min-height:100vh;}
+a{color:inherit;text-decoration:none;}
+.topbar{display:flex;justify-content:space-between;align-items:center;padding:16px 28px;
+  background:rgba(15,18,38,.7);backdrop-filter:blur(10px);border-bottom:1px solid var(--line);position:sticky;top:0;z-index:20;}
+.brand{display:flex;align-items:center;gap:12px;}
+.logo{font-size:30px;}
+.brand-name{font-weight:800;font-size:18px;letter-spacing:1px;}
+.brand-sub{font-size:11px;color:var(--muted);letter-spacing:2px;}
+.nav{display:flex;align-items:center;gap:18px;}
+.nav a{color:var(--muted);font-size:14px;}
+.nav a:hover{color:var(--text);}
+.cart-btn,.login-btn{background:var(--brand);color:#fff;border:none;border-radius:20px;padding:8px 16px;font-size:13px;cursor:pointer;font-weight:600;}
+.login-btn{background:transparent;border:1px solid var(--brand2);color:var(--brand2);}
+.badge{background:var(--accent);color:#222;border-radius:10px;padding:0 7px;font-size:12px;margin-left:4px;}
+.userbar{padding:10px 28px;background:rgba(108,92,231,.15);font-size:14px;color:var(--text);}
+.link-btn{background:none;border:none;color:var(--brand2);cursor:pointer;text-decoration:underline;font-size:13px;}
+.hero{display:flex;align-items:center;justify-content:space-between;gap:20px;padding:54px 28px;flex-wrap:wrap;}
+.hero-text h1{font-size:34px;font-weight:800;background:linear-gradient(90deg,var(--brand2),var(--brand));-webkit-background-clip:text;background-clip:text;color:transparent;}
+.hero-text p{color:var(--muted);margin:14px 0 22px;max-width:520px;}
+.cta{display:inline-block;background:linear-gradient(90deg,var(--brand),var(--brand2));color:#fff;padding:12px 24px;border-radius:26px;font-weight:700;}
+.hero-art{font-size:64px;letter-spacing:8px;}
+.filters{display:flex;gap:10px;padding:0 28px 18px;flex-wrap:wrap;}
+.chip{background:var(--card);border:1px solid var(--line);color:var(--muted);padding:8px 18px;border-radius:20px;cursor:pointer;font-size:14px;}
+.chip.active{background:var(--brand);color:#fff;border-color:var(--brand);}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:18px;padding:6px 28px 30px;}
+.card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:18px;display:flex;flex-direction:column;gap:8px;transition:transform .15s,border-color .15s;}
+.card:hover{transform:translateY(-4px);border-color:var(--brand);}
+.thumb{font-size:46px;text-align:center;background:rgba(255,255,255,.04);border-radius:12px;padding:14px 0;}
+.card h3{font-size:16px;}
+.card .cat{font-size:12px;color:var(--brand2);}
+.price{font-size:18px;font-weight:800;color:var(--accent);}
+.card .desc{font-size:12px;color:var(--muted);min-height:34px;}
+.add{margin-top:auto;background:var(--brand);color:#fff;border:none;border-radius:10px;padding:9px;cursor:pointer;font-weight:600;}
+.ai-section{padding:10px 28px 40px;}
+.ai-section h2{font-size:20px;margin-bottom:4px;}
+.ai-tip{color:var(--muted);font-size:13px;margin-bottom:14px;}
+.footer{padding:30px 28px;border-top:1px solid var(--line);color:var(--muted);font-size:13px;text-align:center;}
+.footer .muted{font-size:12px;margin-top:6px;opacity:.7;}
+.drawer{position:fixed;top:0;right:0;width:340px;max-width:90vw;height:100vh;background:var(--card);border-left:1px solid var(--line);z-index:40;display:flex;flex-direction:column;}
+.drawer-head{display:flex;justify-content:space-between;align-items:center;padding:18px;border-bottom:1px solid var(--line);}
+.drawer-head h3{font-size:17px;}
+.close{background:none;border:none;color:var(--muted);font-size:20px;cursor:pointer;}
+.drawer-body{flex:1;overflow:auto;padding:14px;display:flex;flex-direction:column;gap:12px;}
+.cart-item{display:flex;gap:10px;align-items:center;background:rgba(255,255,255,.03);border-radius:10px;padding:10px;}
+.cart-item .ci-emoji{font-size:28px;}
+.cart-item .ci-info{flex:1;}
+.cart-item .ci-name{font-size:14px;}
+.cart-item .ci-price{color:var(--accent);font-size:13px;}
+.qty{display:flex;align-items:center;gap:8px;}
+.qty button{width:24px;height:24px;border-radius:6px;border:1px solid var(--line);background:transparent;color:var(--text);cursor:pointer;}
+.drawer-foot{padding:16px;border-top:1px solid var(--line);}
+.total{margin-bottom:10px;font-size:15px;}
+.buy{width:100%;background:linear-gradient(90deg,var(--brand),var(--brand2));color:#fff;border:none;border-radius:10px;padding:12px;font-weight:700;cursor:pointer;}
+.empty{color:var(--muted);text-align:center;padding:30px 0;}
+.modal{position:fixed;inset:0;background:rgba(0,0,0,.6);display:flex;align-items:center;justify-content:center;z-index:50;}
+.modal-box{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:26px;width:340px;max-width:92vw;position:relative;}
+.modal-box h3{margin-bottom:16px;}
+.modal-box input{width:100%;padding:11px;border-radius:10px;border:1px solid var(--line);background:#0f1226;color:var(--text);margin-bottom:12px;font-size:14px;}
+.submit{width:100%;background:var(--brand);color:#fff;border:none;border-radius:10px;padding:11px;font-weight:700;cursor:pointer;}
+.hint{font-size:13px;margin-top:10px;min-height:18px;}
+.hint.ok{color:var(--ok);}
+.hint.err{color:#ff6b6b;}
+.demo{margin-top:16px;font-size:12px;color:var(--muted);background:rgba(255,255,255,.04);border-radius:10px;padding:12px;line-height:1.9;}
+.demo code{background:#0f1226;padding:1px 6px;border-radius:5px;color:var(--brand2);}
+.toast{position:fixed;bottom:30px;left:50%;transform:translateX(-50%);background:var(--ok);color:#06281a;padding:12px 22px;border-radius:24px;font-weight:700;opacity:0;transition:opacity .3s;z-index:60;pointer-events:none;}
+.toast.show{opacity:1;}
+@media(max-width:600px){.nav a{display:none;}.hero-text h1{font-size:26px;}}
+</style>
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand">
+      <span class="logo">☁️</span>
+      <div><div class="brand-name">智能云 AI 商城</div><div class="brand-sub">IntelliCloud AI Store</div></div>
+    </div>
+    <nav class="nav">
+      <a href="#products">全部商品</a>
+      <a href="#ai">AI 智能推荐</a>
+      <button class="cart-btn" id="cartBtn">🛒 购物车 <span class="badge" id="cartBadge">0</span></button>
+      <button class="login-btn" id="loginBtn">登录 / 注册</button>
+    </nav>
+  </header>
+
+  <div class="userbar" id="userbar" hidden>
+    👋 欢迎，<b id="userName">用户</b> ！ <button class="link-btn" id="logoutBtn">退出登录</button>
+  </div>
+
+  <section class="hero">
+    <div class="hero-text">
+      <h1>智能云 AI 电商在线销售系统</h1>
+      <p>精选 AI 硬件 · 云端算力 · 智能 SaaS，一站式购齐你的智能生活。</p>
+      <a class="cta" href="#products">立即选购 →</a>
+    </div>
+    <div class="hero-art">🤖💡🛍️</div>
+  </section>
+
+  <section class="filters" id="products">
+    <button class="chip active" data-cat="all">全部</button>
+    <button class="chip" data-cat="hardware">AI 硬件</button>
+    <button class="chip" data-cat="cloud">云端服务</button>
+    <button class="chip" data-cat="saas">智能 SaaS</button>
+  </section>
+
+  <main class="grid" id="productGrid"></main>
+
+  <section class="ai-section" id="ai">
+    <h2>✨ AI 智能推荐</h2>
+    <p class="ai-tip">基于你的浏览，为你优选以下商品：</p>
+    <div class="grid" id="aiGrid"></div>
+  </section>
+
+  <footer class="footer">
+    <p>智能云 AI 电商在线销售系统 · 课程设计成果演示</p>
+    <p class="muted">本站点为静态演示系统，登录与下单逻辑在浏览器本地完成，仅供学习交流。</p>
+  </footer>
+
+  <div class="drawer" id="cartDrawer" hidden>
+    <div class="drawer-head"><h3>我的购物车</h3><button class="close" id="closeCart">✕</button></div>
+    <div class="drawer-body" id="cartBody"></div>
+    <div class="drawer-foot"><div class="total">合计：<b id="cartTotal">¥0</b></div><button class="buy" id="checkoutBtn">提交订单</button></div>
+  </div>
+
+  <div class="modal" id="loginModal" hidden>
+    <div class="modal-box">
+      <button class="close" id="closeLogin">✕</button>
+      <h3>用户登录 / 注册</h3>
+      <input id="loginUser" placeholder="用户名" autocomplete="username">
+      <input id="loginPass" type="password" placeholder="密码" autocomplete="current-password">
+      <button class="submit" id="loginSubmit">登录</button>
+      <p class="hint" id="loginHint"></p>
+      <div class="demo"><b>演示账号（可直接登录）：</b><br>普通用户：<code>user</code> / <code>123456</code><br>管理员：<code>admin</code> / <code>admin888</code></div>
+    </div>
+  </div>
+
+  <div class="toast" id="toast"></div>
+
+<script>
+const PRODUCTS = [
+  { id:1, name:"智能云 AI 音箱", cat:"hardware", emoji:"🔊", price:299,  desc:"语音助手 + 云端大模型，一句话控制全屋智能。" },
+  { id:2, name:"智能摄像头 Pro", cat:"hardware", emoji:"📷", price:399,  desc:"AI 人形识别，异常实时推送到手机。" },
+  { id:3, name:"AI 学习平板",    cat:"hardware", emoji:"📱", price:1299, desc:"内置智能辅导引擎，个性化学习路径。" },
+  { id:4, name:"云端算力套餐",    cat:"cloud",    emoji:"⚡", price:99,   desc:"GPU 云端算力，按量计费，开箱即用。" },
+  { id:5, name:"云存储 1TB",     cat:"cloud",    emoji:"💾", price:129,  desc:"企业级加密云盘，多端同步不限速。" },
+  { id:6, name:"AI 写作助手年卡", cat:"saas",     emoji:"✍️", price:299,  desc:"公文 / 营销 / 报告一键生成，效率翻倍。" },
+  { id:7, name:"智能客服机器人",  cat:"saas",     emoji:"🤖", price:199,  desc:"7×24 自动应答，降低 60% 人工成本。" },
+  { id:8, name:"AI 图像生成 API", cat:"saas",     emoji:"🎨", price:99,   desc:"文生图 / 图生图接口，开发者即接即用。" },
+];
+const ACCOUNTS = { "user":"123456", "admin":"admin888" };
+let cart = JSON.parse(localStorage.getItem("cart") || "{}");
+let currentUser = localStorage.getItem("currentUser") || "";
+const $ = (s) => document.querySelector(s);
+const fmt = (n) => "¥" + n.toLocaleString("zh-CN");
+function toast(msg){const t=$("#toast");t.textContent=msg;t.classList.add("show");setTimeout(()=>t.classList.remove("show"),1800);}
+function catName(c){return {hardware:"AI 硬件",cloud:"云端服务",saas:"智能 SaaS"}[c]||c;}
+function renderProducts(cat="all"){
+  const list = cat==="all"?PRODUCTS:PRODUCTS.filter(p=>p.cat===cat);
+  $("#productGrid").innerHTML = list.map(p=>`
+    <div class="card"><div class="thumb">${p.emoji}</div><div class="cat">${catName(p.cat)}</div>
+    <h3>${p.name}</h3><div class="desc">${p.desc}</div><div class="price">${fmt(p.price)}</div>
+    <button class="add" data-id="${p.id}">加入购物车</button></div>`).join("");
+}
+function renderAI(){
+  const pool=[...PRODUCTS].sort(()=>Math.random()-0.5).slice(0,4);
+  $("#aiGrid").innerHTML = pool.map(p=>`
+    <div class="card"><div class="thumb">${p.emoji}</div><div class="cat">${catName(p.cat)}</div>
+    <h3>${p.name}</h3><div class="desc">${p.desc}</div><div class="price">${fmt(p.price)}</div>
+    <button class="add" data-id="${p.id}">加入购物车</button></div>`).join("");
+}
+function saveCart(){localStorage.setItem("cart",JSON.stringify(cart));}
+function cartCount(){return Object.values(cart).reduce((a,b)=>a+b,0);}
+function cartTotal(){return Object.entries(cart).reduce((s,[id,q])=>s+PRODUCTS.find(p=>p.id==id).price*q,0);}
+function updateCartBadge(){$("#cartBadge").textContent=cartCount();}
+function renderCart(){
+  const body=$("#cartBody"),ids=Object.keys(cart);
+  if(ids.length===0){body.innerHTML=`<div class="empty">购物车还是空的 🛒<br>去挑几件好物吧～</div>`;}
+  else{body.innerHTML=ids.map(id=>{const p=PRODUCTS.find(x=>x.id==id),q=cart[id];
+    return `<div class="cart-item"><div class="ci-emoji">${p.emoji}</div><div class="ci-info">
+    <div class="ci-name">${p.name}</div><div class="ci-price">${fmt(p.price)}</div>
+    <div class="qty"><button data-act="dec" data-id="${id}">−</button><span>${q}</span>
+    <button data-act="inc" data-id="${id}">＋</button></div></div></div>`;}).join("");}
+  $("#cartTotal").textContent=fmt(cartTotal());
+}
+function addToCart(id){cart[id]=(cart[id]||0)+1;saveCart();updateCartBadge();renderCart();toast("已加入购物车");}
+function showUser(){
+  if(currentUser){$("#userbar").hidden=false;$("#userName").textContent=currentUser;$("#loginBtn").textContent="已登录";}
+  else{$("#userbar").hidden=true;$("#loginBtn").textContent="登录 / 注册";}
+}
+function doLogin(){
+  const u=$("#loginUser").value.trim(),p=$("#loginPass").value,hint=$("#loginHint");
+  if(!u||!p){hint.textContent="请输入用户名和密码";hint.className="hint err";return;}
+  if(ACCOUNTS[u]===p){currentUser=u;localStorage.setItem("currentUser",u);hint.textContent="登录成功！";hint.className="hint ok";showUser();setTimeout(()=>{$("#loginModal").hidden=true;toast("欢迎回来，"+u);},700);}
+  else{hint.textContent="账号或密码错误，试试下方演示账号";hint.className="hint err";}
+}
+function logout(){currentUser="";localStorage.removeItem("currentUser");showUser();toast("已退出登录");}
+function checkout(){
+  if(cartCount()===0){toast("购物车是空的");return;}
+  if(!currentUser){$("#loginModal").hidden=false;toast("请先登录再下单");return;}
+  toast("下单成功，感谢惠顾 "+currentUser+"！");cart={};saveCart();updateCartBadge();renderCart();$("#cartDrawer").hidden=true;
+}
+document.addEventListener("click",(e)=>{
+  const add=e.target.closest(".add");if(add){addToCart(Number(add.dataset.id));return;}
+  const q=e.target.closest(".qty button");if(q){const id=q.dataset.id;
+    if(q.dataset.act==="inc")cart[id]++;if(q.dataset.act==="dec"){cart[id]--;if(cart[id]<=0)delete cart[id];}
+    saveCart();updateCartBadge();renderCart();}
+});
+$("#cartBtn").onclick=()=>{$("#cartDrawer").hidden=false;renderCart();};
+$("#closeCart").onclick=()=>{$("#cartDrawer").hidden=true;};
+$("#checkoutBtn").onclick=checkout;
+$("#loginBtn").onclick=()=>{$("#loginModal").hidden=false;};
+$("#closeLogin").onclick=()=>{$("#loginModal").hidden=true;};
+$("#loginSubmit").onclick=doLogin;
+$("#logoutBtn").onclick=logout;
+document.querySelectorAll(".chip").forEach(c=>{c.onclick=()=>{document.querySelectorAll(".chip").forEach(x=>x.classList.remove("active"));c.classList.add("active");renderProducts(c.dataset.cat);};});
+renderProducts();renderAI();updateCartBadge();showUser();
+</script>
+</body>
+</html>
